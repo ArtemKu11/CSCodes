@@ -9,6 +9,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using GCodeRobotCSharpEdition.LoggerPackage;
 
 namespace GCodeRobotCSharpEdition
 {
@@ -30,13 +31,19 @@ namespace GCodeRobotCSharpEdition
         private Fanuc fanuc;
 
         public List<point> LayerPoints = new List<point>();
+        
+        private Logger _logger = LoggerFactory.GetExistingOrCreateNewLogger("RootLogger");
 
         public ConverterGcode(Form1 form)
         {
+            _logger.LogWithTime("ConverterGcode contr start");
+            
             this._form = form;
             header = new List<string>();
             footer = new List<string>();
             fanuc = new Fanuc(_form);
+            
+            _logger.LogWithTime("ConverterGcode contr stop");
         }
 
         
@@ -44,17 +51,29 @@ namespace GCodeRobotCSharpEdition
         //загрузка файла
         public void on_btn_Open_clicked()
         {
+            Action action = on_btn_Open_clicked;
+            var startTime = DateTime.Now;
+            _logger.LogStartOfMethod(action.Method, null, startTime);
+            
             OpenFileDialog openFile = new OpenFileDialog();
             openFile.Filter = "GCode (*.gcode *.gc *.nc) |*.gcode; *.gc' *.nc| Other files (*.*)|*.*";
             if (openFile.ShowDialog() == DialogResult.Cancel)
                 return;
             // получаем выбранный файл
             _form.InputFileInfo = openFile.FileName;
+            
+            var timeSpan = DateTime.Now - startTime;
+            _logger.LogEndOfMethod(action.Method, null, null, timeSpan);
         }
         
         //обработка gcode
         void gcode_process(Group[] line)
         {
+            Action<Group[]> action = gcode_process; // start log
+            var startTime = DateTime.Now;
+            _logger.LogStartOfMethod(action.Method, null, startTime);
+            _logger.LogWithTime("Аргументы: " + line); //
+            
             _gcode.command = line[0].Value;
             _gcode.commandvalue = int.Parse(line[1].Value);
             _gcode.parametrs = SplitParams(line);
@@ -147,11 +166,18 @@ namespace GCodeRobotCSharpEdition
                     LayerPoints.Add(c);
                  }
             }
-
+            
+            var timeSpan = DateTime.Now - startTime; // end log
+            _logger.LogEndOfMethod(action.Method, null, null, timeSpan); //
         }
 
         private List<Param> SplitParams(Group[] line) 
         {
+            Func<Group[],List<Param>> action = SplitParams; // start log
+            var startTime = DateTime.Now;
+            _logger.LogStartOfMethod(action.Method, null, startTime);
+            _logger.LogWithTime("Аргументы: " + line); // 
+            
             var m1 = Regex.Matches(line[2].Value,@"((?!\d)\w+?)('.*'|(\d+\.?)+|-?\d*\.?\d*)");
             var Params = new List<Param>();
             foreach (Match match in m1)
@@ -162,13 +188,23 @@ namespace GCodeRobotCSharpEdition
                 var val = grops[1].Value;
                 Params.Add(new Param(type, float.Parse(val, CultureInfo.InvariantCulture.NumberFormat)));
             }
+            
+            var timeSpan = DateTime.Now - startTime;
+            _logger.LogEndOfMethod(action.Method, null, Params, timeSpan);
+            
             return Params;
         }
 
         public void on_btn_Process_clicked()
         {
+            Action action = on_btn_Process_clicked; // Лог старта
+            var startTime = DateTime.Now;
+            _logger.LogStartOfMethod(action.Method, null, startTime); //
+            
             string inputFile = _form.Input;
-
+            
+            _logger.LogWithTime("inputFile: " + inputFile); // log
+            
             StreamReader sr = new StreamReader(inputFile);
             var m1 = Regex.Matches(sr.ReadToEnd(), @"(?!; *.+)(G|M|T|g|m|t)(\d+)(([ \t]*(?!G|M|g|m)\w('.*'|([-\d\.]*)))*)[ \t]*(;[ \t]*(.*))?|;[ \t]*(.+)");
             sr.Close();
@@ -186,6 +222,9 @@ namespace GCodeRobotCSharpEdition
             }
             fanuc.GenerateFanucFile(LayerPoints);
             
+            
+            var timeSpan = DateTime.Now - startTime; // Лог конца
+            _logger.LogEndOfMethod(action.Method, null, null, timeSpan); //
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using GCodeRobotCSharpEdition.Robot;
 using System.Diagnostics;
 using System.Threading;
+using GCodeRobotCSharpEdition.LoggerPackage;
 using GCodeRobotCSharpEdition.Tamplates;
 using NetMQ.Sockets;
 using NetMQ;
@@ -22,6 +23,7 @@ namespace GCodeRobotCSharpEdition
         public CancellationToken ct= cts.Token;
         private StateTempl _curState= new StateTempl("Ready to print",Color.Green);
         private bool _isTranslating;
+        private Logger _logger = LoggerFactory.GetExistingOrCreateNewLogger("RootLogger");
         public StateTempl CurState
         {
             get
@@ -97,6 +99,7 @@ namespace GCodeRobotCSharpEdition
 
         public Form2(string ip, RobotTamplate rtmpl)
         {
+            _logger.LogWithTime("Form2.constr START");
             InitializeComponent();
             CurState= new StateTempl("Ready to print", Color.Green); 
             robot = rtmpl;
@@ -108,6 +111,8 @@ namespace GCodeRobotCSharpEdition
             // Sets the timer interval to 5 seconds.
             myTimer.Interval = 100;
             myTimer.Start();
+            
+            _logger.LogWithTime("Form2.constr END");
 
         }
 
@@ -119,6 +124,8 @@ namespace GCodeRobotCSharpEdition
         
         private void Print_Click(object sender, EventArgs e)
         {
+            _logger.LogWithTime("Form2.Print_Click START");
+
             FolderBrowserDialog FBD = new FolderBrowserDialog();
             FBD.ShowNewFolderButton = false;
             robot.PrParam.curnumb = 1;
@@ -137,7 +144,8 @@ namespace GCodeRobotCSharpEdition
             }
             StartPrint.Enabled = true;
             
-           
+            _logger.LogWithTime("Form2.Print_Click END");
+
         }
        
         public int timerCount { 
@@ -183,6 +191,9 @@ namespace GCodeRobotCSharpEdition
 
         private int GetLSCount(string patch)
         {
+            _logger.LogWithTime("Form2.GetLSCount START");
+
+            
             Collection.Items.Clear();
             var dirName = patch.Substring(patch.LastIndexOf("\\") + 1);
             var filesCount = new DirectoryInfo(patch).GetFiles().Length;
@@ -199,7 +210,10 @@ namespace GCodeRobotCSharpEdition
             }
                 
             else
+            {
+                _logger.LogWithTime("Form2.GetLSCount END, return 0");
                 return 0;
+            }
             for (int i = 1; i < filesCount; i++)
             {
                 if (File.Exists(patch + "\\" + dirName + $"_{i+1}" + ".tp"))
@@ -208,15 +222,21 @@ namespace GCodeRobotCSharpEdition
                     Collection.Items.Add(dirName + $"_{i+1}" + ".tp");
                 }
                 else
-                    return
-                        res;
-            }
+                {
+                    _logger.LogWithTime("Form2.GetLSCount END, return: " + _logger.NTS(res));
 
+                    return res;
+                }            
+            }
+            _logger.LogWithTime("Form2.GetLSCount END, return: " + _logger.NTS(res));
             return res;
         }
         public Task task { get; set; }
         private void MakeTP_Click(object sender, EventArgs e)
         {
+            
+            _logger.LogWithTime("Form2.MakeTP_Click START");
+
             if (TpAll.Checked)
             {
                 var fileContent = string.Empty;
@@ -263,6 +283,8 @@ namespace GCodeRobotCSharpEdition
                         _isTranslating=true;
                 }
             }
+            
+            _logger.LogWithTime("Form2.MakeTP_Click END");
 
         }
         
@@ -283,6 +305,8 @@ namespace GCodeRobotCSharpEdition
 
         private void button1_Click(object sender, EventArgs e)
         {
+            _logger.LogWithTime("Form2.button1_Click START");
+
             if (!robot.isPrinting)
             { // CurFN.Text = "Текущий файл "+Collection.Items[0];
                 
@@ -326,12 +350,16 @@ namespace GCodeRobotCSharpEdition
                 task.Start();
                 myTimer.Start();
             }
+            _logger.LogWithTime("Form2.button1_Click END");
+
         }
 
         
 
         private void Drop_Click(object sender, EventArgs e)
         {
+            _logger.LogWithTime("Form2.Drop_Click START");
+
             myTimer.Stop();
             Await_layer.Enabled = true;
             cts.Cancel();
@@ -344,6 +372,8 @@ namespace GCodeRobotCSharpEdition
             StartPrint.Text = $"Следующий файл";
             //robot.ChechTest();
             _isTranslating = false;
+            _logger.LogWithTime("Form2.Drop_Click END");
+
         }
         /// <summary>
         /// next
@@ -352,26 +382,41 @@ namespace GCodeRobotCSharpEdition
         /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
+            _logger.LogWithTime("Form2.button2_Click START");
+
             if (Collection.SelectedItem != null)
                 if (Collection.SelectedIndex < Collection.Items.Count-1)
                 {
                     Collection.SelectedIndex++;
                 }
+            
+            _logger.LogWithTime("Form2.button2_Click END");
+
         }
 
         private void Prev_Click(object sender, EventArgs e)
         {
+            _logger.LogWithTime("Form2.Prev_Click START");
+
             if (Collection.SelectedItem != null)
                 if (Collection.SelectedIndex >0)
                 {
                     Collection.SelectedIndex--;
                 }
+            
+            _logger.LogWithTime("Form2.Prev_Click END");
+
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            _logger.LogWithTime("Form2.button3_Click START");
+
             if (Collection.SelectedItem == null)
                 MessageBox.Show("Файл не был выбран");
+            
+            _logger.LogWithTime("Form2.button3_Click START");
+
         }
 
         private void Form2_Load(object sender, EventArgs e)

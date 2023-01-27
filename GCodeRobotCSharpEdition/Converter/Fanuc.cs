@@ -9,6 +9,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using GCodeRobotCSharpEdition.LoggerPackage;
 
 
 namespace GCodeRobotCSharpEdition.Converter
@@ -17,6 +18,7 @@ namespace GCodeRobotCSharpEdition.Converter
     {
 
         private Form1 _form;
+        private Logger _logger = LoggerFactory.GetExistingOrCreateNewLogger("RootLogger");
 
         public Fanuc(Form1 form)
         {
@@ -59,6 +61,11 @@ namespace GCodeRobotCSharpEdition.Converter
 
         public void GenerateFanucFile(List<point> points)
         {
+            Action<List<point>> action = GenerateFanucFile;
+            var startTime = DateTime.Now;
+            _logger.LogStartOfMethod(action.Method, null, startTime);
+            _logger.LogWithTime("Аргументы: " + points); // 
+            
             point c = new point();
 
             positioner.j1 = 0;
@@ -262,6 +269,9 @@ namespace GCodeRobotCSharpEdition.Converter
             psi.Arguments = @"/n, /select, " + file;
             PrFolder.StartInfo = psi;
             PrFolder.Start();
+            
+            var timeSpan = DateTime.Now - startTime;
+            _logger.LogEndOfMethod(action.Method, null, null, timeSpan);
         }
 
         private bool checkStartsStops(coords p1, coords p2)

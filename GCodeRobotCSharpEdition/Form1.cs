@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GCodeRobotCSharpEdition.LoggerPackage;
 using GCodeRobotCSharpEdition.Robot;
 using GCodeRobotCSharpEdition.Tamplates;
 
@@ -174,9 +175,12 @@ namespace GCodeRobotCSharpEdition
         }
         public bool WieldShield { get { return WeldSheild.Checked; } }
         public int DefDegree { get { return int.Parse(Degree_def.Text); } }
+        private Logger logger = LoggerFactory.GetExistingOrCreateNewLogger("RootLogger");
         
         public Form1()
         {
+            logger.LogWithTime("start Form1 construct START");
+            
             InitializeComponent();
             conv = new ConverterGcode(this);
             //convPM = new ConverterPM(this);
@@ -192,6 +196,8 @@ namespace GCodeRobotCSharpEdition
             Slice.StartInfo = psipy;
             Slice.Start();
             sets.Load();
+            
+            logger.LogWithTime("end Form1 construct END");
         }
 
         private List<robotVisualize> robotsList = new List<robotVisualize>();
@@ -217,16 +223,20 @@ namespace GCodeRobotCSharpEdition
 
         private void button3_Click(object sender, EventArgs e)
         {
+            logger.LogWithTime("button3_Click START");
             
             if (!checkBox2.Checked)
                 conv.on_btn_Process_clicked();
             //else
             //    convPM.on_btn_Process_clicked();
             checkBox2.Enabled = true ;
+            
+            logger.LogWithTime("button3_Click END");
         }
 
         private void check_startStop_Distance_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("check_startStop_Distance_CheckedChanged START");
             var a = sender as CheckBox;
             if(a.Checked)
             {
@@ -239,6 +249,9 @@ namespace GCodeRobotCSharpEdition
                 CheckDistance.Visible = false;
                 label21.Visible = false;
             }
+            
+            logger.LogWithTime("check_startStop_Distance_CheckedChanged END");
+
         }
 
       
@@ -246,12 +259,16 @@ namespace GCodeRobotCSharpEdition
 
         private void OpenFile_Click_1(object sender, EventArgs e)
         {
+            logger.LogWithTime("OpenFile_Click_1 START");
             if(!checkBox2.Checked)
                 conv.on_btn_Open_clicked();
             //else
             //    convPM.on_btn_Open_clicked();
             if(InputFile.Text!="")
                 checkBox2.Enabled = false;
+            
+            logger.LogWithTime("OpenFile_Click_1 END");
+
         }
         private bool _RO;
         private bool _wave;
@@ -260,6 +277,7 @@ namespace GCodeRobotCSharpEdition
 
         private void Wave_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("Wave_CheckedChanged START");
             if (Wave.Checked)
             {
                 WaweInd.Enabled = true;
@@ -271,30 +289,41 @@ namespace GCodeRobotCSharpEdition
                 GetWave = false;
             }
             
-                
+            logger.LogWithTime("Wave_CheckedChanged END");
+    
         }
 
         private void RO_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("RO_CheckedChanged START");
             if (RO.Checked)
                 GetRO = true;
             else
                 GetRO = false;
+            logger.LogWithTime("RO_CheckedChanged END");
+
         }
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("checkBox2_CheckedChanged START");
             if (checkBox2.Checked)
                 label1.Text = "PowerMill file name:";
             else
                 label1.Text = "GCode file name:";
+            logger.LogWithTime("checkBox2_CheckedChanged END");
+
         }
 
         private void check_startStop_Distance_CheckedChanged_1(object sender, EventArgs e)
         {
+            logger.LogWithTime("check_startStop_Distance_CheckedChanged_1 START");
             if (check_startStop_Distance.Checked)
                 CheckDistance.Enabled = true;
             else
                 CheckDistance.Enabled = false;
+            
+            logger.LogWithTime("check_startStop_Distance_CheckedChanged_1 END");
+
         }
 
 
@@ -303,6 +332,8 @@ namespace GCodeRobotCSharpEdition
 //TOOL TAB IN WORKING (FREEZ)
         private void Hummer_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("Hummer_CheckedChanged START");
+
             if( Hammer.Checked)
             {
                 var a = toolList.Where(c => c.ToolType == "Hammer").ToList();
@@ -326,10 +357,14 @@ namespace GCodeRobotCSharpEdition
                 HammerZ.Enabled = false;
                 HammerSpeed.Enabled = false;
             }
+            logger.LogWithTime("Hummer_CheckedChanged END");
+
         }
 
         private void Cutter_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("Cutter_CheckedChanged START");
+
             if (Cutter.Checked)
             {
                 var a = toolList.Where(c => c.ToolType == "Cutter").ToList();
@@ -353,10 +388,14 @@ namespace GCodeRobotCSharpEdition
                 CutterZ.Enabled = false;
                 CutterSpeed.Enabled = false;
             }
+            logger.LogWithTime("Cutter_CheckedChanged END");
+
         }
        
         private void Laser_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("Laser_CheckedChanged START");
+
             if (Laser.Checked)
             {
                 var a = toolList.Where(c => c.ToolType == "Laser").ToList();
@@ -380,10 +419,15 @@ namespace GCodeRobotCSharpEdition
                 LaserZ.Enabled = false;
                 LaserSpeed.Enabled = false;
             }
+            
+            logger.LogWithTime("Laser_CheckedChanged END");
+
         }
 
         private void Pyrometer_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("Pyrometer_CheckedChanged START");
+
             if (Pyrometer.Checked)
             {
                 var a = toolList.Where(c => c.ToolType == "Pyrometer").ToList();
@@ -407,11 +451,16 @@ namespace GCodeRobotCSharpEdition
                 PyrometerZ.Enabled = false;
                 PyrometerSpeed.Enabled = false;
             }
+            
+            logger.LogWithTime("Pyrometer_CheckedChanged END");
+
         }
       
        
         private void Surfacing_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("Surfacing_CheckedChanged START");
+
             if (Surfacing.Checked)
             {
                 var a = toolList.Where(c => c.ToolType == "Surfacing").ToList();
@@ -435,43 +484,78 @@ namespace GCodeRobotCSharpEdition
                 SurfacingZ.Enabled = false;
                 SurfacingSpeed.Enabled = false;
             }
+            
+            logger.LogWithTime("Surfacing_CheckedChanged END");
+
         }
         private void ForAllLyaer(string value)
         {
+            logger.LogWithTime("ForAllLyaer START");
+
             HammerLayer.Text = value;
             CutterLayer.Text = value;
             LaserLayer.Text = value;
             PyrometerLayer.Text = value;
             SurfacingLayer.Text = value;
+            
+            logger.LogWithTime("ForAllLyaer END");
 
         }
         private void SetX (string tool, float val)
         {
+            logger.LogWithTime("SetX START");
+
             var a = toolList.Where(c => c.ToolType == tool).ToList();
             a[0].Offcet.X = val;
+            
+            logger.LogWithTime("SetX END");
+
         }
         private void SetY(string tool, float val)
         {
+            logger.LogWithTime("SetY START");
+
             var a = toolList.Where(c => c.ToolType == tool).ToList();
             a[0].Offcet.Y = val;
+            
+            logger.LogWithTime("SetY END");
+
         }
         private void SetZ(string tool, float val)
         {
+            logger.LogWithTime("SetZ START");
+
+            
             var a = toolList.Where(c => c.ToolType == tool).ToList();
             a[0].Offcet.Z = val;
+            
+            logger.LogWithTime("SetZ END");
+
         }
         private void SetSpeed(string tool, float val)
         {
+            logger.LogWithTime("SetSpeed START");
+
             var a = toolList.Where(c => c.ToolType == tool).ToList();
             a[0].Speed = val;
+            
+            logger.LogWithTime("SetSpeed END");
+
         }
         private void SetLayer(string tool, int val)
         {
+            logger.LogWithTime("SetLayer START");
+
             var a = toolList.Where(c => c.ToolType == tool).ToList();
             a[0].Layer = val;
+            
+            logger.LogWithTime("SetLayer END");
+
         }
         private void apply_Click(object sender, EventArgs e)
         {
+            logger.LogWithTime("apply_Click START");
+
             if (Hammer.Checked)
             {
                 SetX("Hammer", float.Parse(HammerX.Text));
@@ -514,37 +598,63 @@ namespace GCodeRobotCSharpEdition
             }
             
            
-            
+            logger.LogWithTime("apply_Click END");
+
         }
 
         private void HummerLayer_TextChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("HummerLayer_TextChanged START");
+
             if(checkBox1.Checked)
                 ForAllLyaer(HammerLayer.Text);
+            
+            logger.LogWithTime("HummerLayer_TextChanged END");
+
         }
 
         private void CutterLayer_TextChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("CutterLayer_TextChanged START");
+
             if (checkBox1.Checked)
                 ForAllLyaer(CutterLayer.Text);
+            
+            logger.LogWithTime("CutterLayer_TextChanged END");
+
         }
 
         private void LaserLayer_TextChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("LaserLayer_TextChanged START");
+
             if (checkBox1.Checked)
                 ForAllLyaer(LaserLayer.Text);
+            
+            logger.LogWithTime("LaserLayer_TextChanged END");
+
         }
 
         private void PyrometerLayer_TextChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("PyrometerLayer_TextChanged START");
+
             if (checkBox1.Checked)
                 ForAllLyaer(PyrometerLayer.Text);
+            
+            logger.LogWithTime("PyrometerLayer_TextChanged END");
+
         }
 
         private void SurfacingLayer_TextChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("SurfacingLayer_TextChanged START");
+
             if (checkBox1.Checked)
                 ForAllLyaer(SurfacingLayer.Text);
+            
+            logger.LogWithTime("SurfacingLayer_TextChanged END");
+
         }
 
         private void SendTp_CheckedChanged(object sender, EventArgs e)
@@ -568,52 +678,71 @@ namespace GCodeRobotCSharpEdition
 
         private void tabPage2_Click(object sender, EventArgs e)
         {
+            logger.LogWithTime("tabPage2_Click START");
+
+            logger.LogWithTime("tabPage2_Click END");
 
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+            logger.LogWithTime("button2_Click START");
+
+            logger.LogWithTime("button2_Click END");
+
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-
+            logger.LogWithTime("dataGridView1_CellValueChanged START");
+                
+            logger.LogWithTime("dataGridView1_CellValueChanged END");
         }
 
         
 
         private void проверитьОбновленияToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            logger.LogWithTime("проверитьОбновленияToolStripMenuItem_Click");
+
             Blank();
         }
          public static void Blank()
         {
+            LoggerFactory.GetExistingOrCreateNewLogger("RootLogger").LogWithTime("Blank");
+
             MessageBox.Show("В будущих версиях");
         }
         private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            logger.LogWithTime("настройкиToolStripMenuItem_Click");
+
             Settings set = new Settings();
             set.Show();
         }
 
         
 
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e) 
         {
+            logger.LogWithTime("tabControl1_SelectedIndexChanged");
+
             if (tabControl1.SelectedIndex == 1)
             {   
-                Blank();
+                Blank(); // Отвечает за всплывающее окно "В будущих версиях"
                 tabControl1.SelectedIndex = 0;
 
             }
-               
+            
+            logger.LogWithTime("tabControl1_SelectedIndexChanged STOP");
         }
 
         // SEND TO ROBOT TAB
 
         public void UpdateRobotTable()
         {
+            logger.LogWithTime("UpdateRobotTable START");
+
             dataGridView1.Rows.Clear();
             var i = 0;
             foreach (var item in robotsList)
@@ -623,16 +752,24 @@ namespace GCodeRobotCSharpEdition
                 dataGridView1.Rows[i].Cells[2].Style.ForeColor = item.robot.stateTempl.color;
                 i++;
             }
+            logger.LogWithTime("UpdateRobotTable END");
+
         }
 
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            logger.LogWithTime("dataGridView1_CellContentDoubleClick START");
+
             robotsList[e.RowIndex].form.Show();
+            
+            logger.LogWithTime("dataGridView1_CellContentDoubleClick END");
 
         }
 
         private void Print_Click(object sender, EventArgs e)
         {
+            logger.LogWithTime("Print_Click");
+
             FolderBrowserDialog FBD = new FolderBrowserDialog();
             FBD.ShowNewFolderButton = false;
             
@@ -648,27 +785,41 @@ namespace GCodeRobotCSharpEdition
         }
         private void UpdateAllStates(object Sender, EventArgs e)
         {
+            logger.LogWithTime("UpdateAllStates");
+
             UpdateRobotTable();
         }
 
 
-        private void Add_Click(object sender, EventArgs e)
+        private void Add_Click(object sender, EventArgs e) // Клик по Add с добавлением ip робота
         {
+            logger.LogWithTime("Add_Click");
+
             if (NewRobot.Text != "")
             {
                 NewRobot.Text.Replace(',', '.');
+                
+                logger.LogWithTime("Создание Robot Template c IP: " + logger.NTS(NewRobot.Text));
                 RobotTamplate r = new RobotTamplate(NewRobot.Text);
+                logger.LogWithTime("Создан Robot Template");
+                
+                logger.LogWithTime("Создание Form2");
                 Form2 form = new Form2(r.Addres, r);
+                logger.LogWithTime("Создана Form2");
+                
                 r.form = form;
                 robotsList.Add(new robotVisualize(r, form));
             }
             UpdateRobotTable();
-
+            
+            logger.LogWithTime("Add_Click STOP");
         }
 
 
         private void MakeTP_Click(object sender, EventArgs e)
         {
+            logger.LogWithTime("MakeTP_Click");
+
             var fileContent = string.Empty;
             OpenFileDialog FBD = new OpenFileDialog();
             FBD.Filter = "ls files (*.ls)|*.ls|All files (*.*)|*.*";
@@ -705,6 +856,8 @@ namespace GCodeRobotCSharpEdition
 
         private void check_Layers_CheckedChanged(object sender, EventArgs e)
         {
+            logger.LogWithTime("check_Layers_CheckedChanged");
+
             if (check_Layers.Checked)
             {
                 edit_Split.ReadOnly= true;
@@ -720,6 +873,7 @@ namespace GCodeRobotCSharpEdition
 
         private void button1_Click(object sender, EventArgs e)
         {
+            logger.LogWithTime("button1_Click");
 
         }
     }
