@@ -4,22 +4,18 @@ using NetMQ.Sockets;
 
 namespace GCodeTranslator.CmdProcessRunner;
 
-
-/*
- * Предназначен для облегчения поиска и идентификации запуска CMD процессов (питон скрипты и прочее)
- */
+/// <inheritdoc cref="IProcessRunner"/>
 public class ProcessRunner : IProcessRunner
-{   
-    /*
-     * Запускает Scripts\Slicer.py
-     * Асинхронно: нет
-     * Когда в коде: в конце работы метода Parse() ToRobotParser
-     * Когда в форме: внутри алгоритмов после нажатия кнопки "START" в MainWindowForm
-     * Принимает:
-     *  inputDirectory - директория с .ls файлом после парсера
-     *  outputDirectory - директория под .ls файлы после Slicer.py
-     *  laserPass - значение галочки Laser pass
-     */
+{
+    private static string _pythonPath = "python";
+
+    public static string PythonPath
+    {
+        set => _pythonPath = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+
+    /// <inheritdoc cref="IProcessRunner.RunPythonSlicerProcess"/>
     public void RunPythonSlicerProcess(string inputDirectory, string outputDirectory, bool laserPass)
     {
         var pythonSliceProcess = CreatePythonSliceProcess(inputDirectory, outputDirectory, laserPass);
@@ -35,7 +31,7 @@ public class ProcessRunner : IProcessRunner
         if (laserPass)
             cmdString += " d";
         Process sliceProcess = new Process();
-        processStartInfo.FileName = "python";
+        processStartInfo.FileName = _pythonPath;
         processStartInfo.Arguments = cmdString;
         sliceProcess.StartInfo = processStartInfo;
         return sliceProcess;
@@ -44,14 +40,7 @@ public class ProcessRunner : IProcessRunner
 
     
     
-    /*
-     * Запускает процесс открытия директории с результатом парсинга
-     * Асинхронно: да
-     * Когда в коде: в конце работы метода Parse() ToRobotParser
-     * Когда в форме: внутри алгоритмов после нажатия кнопки "START" в MainWindowForm
-     * Принимает:
-     *  directory - директория, которую необходимо открыть
-     */
+    /// <inheritdoc cref="IProcessRunner.RunOpenDirectoryProcess"/>
     public void RunOpenDirectoryProcess(string directory)
     {
         var process = new Process();
@@ -66,19 +55,22 @@ public class ProcessRunner : IProcessRunner
         process.Start();
     }
 
+    
+    /// <inheritdoc cref="IProcessRunner.StartTpConvertingServer"/>
     public Process StartTpConvertingServer()
     {
         ProcessStartInfo processStartInfo = new ProcessStartInfo();
         string cmdString = @"Scripts\convert_2_tp_zmq.py";
 
         Process tpServerProcess = new Process();
-        processStartInfo.FileName = "python";
+        processStartInfo.FileName = _pythonPath;
         processStartInfo.Arguments = cmdString;
         tpServerProcess.StartInfo = processStartInfo;
         tpServerProcess.Start();
         return tpServerProcess;
     }
 
+    /// <inheritdoc cref="IProcessRunner.RunConvertToTpOneFileProcess"/>
     public void RunConvertToTpOneFileProcess(string filePath, string fileDirectory)
     {
         var startInfo = new ProcessStartInfo()
@@ -92,17 +84,7 @@ public class ProcessRunner : IProcessRunner
         // process?.WaitForExit();
     }
 
-    public string RunConvertToTpAllFilesProcess(string fileDirectory)
-    {
-        using (var client = new RequestSocket())
-        {
-            client.Connect($"tcp://localhost:5001");
-            client.SendFrame($"path${fileDirectory}");
-            var message = client.ReceiveFrameString();
-            return message;
-        }
-    }
-
+    /// <inheritdoc cref="IProcessRunner.RunPythonAngleFixProcess"/>
     public void RunPythonAngleFixProcess(string fileDirectory, string maxAngleValue, string criticalAngleDifference, bool cmdRequired = false)
     {
         var processStartInfo = new ProcessStartInfo();
@@ -115,7 +97,7 @@ public class ProcessRunner : IProcessRunner
         else
         {
             cmdString = $"Scripts\\PankratovAngleFix.py {fileDirectory} {maxAngleValue} {criticalAngleDifference}";
-            processStartInfo.FileName = "python";
+            processStartInfo.FileName = _pythonPath;
         }
         processStartInfo.Arguments = cmdString;
 

@@ -5,14 +5,14 @@ namespace GCodeTranslator.Forms.MainWindow
 {
     /// <summary>
     /// <para>
-    /// Основное окно приложения.
+    /// РћСЃРЅРѕРІРЅРѕРµ РѕРєРЅРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ.
     /// </para>
-    /// Хранит листенеры кнопок, чек-боксов и т.д.
+    /// РҐСЂР°РЅРёС‚ Р»РёСЃС‚РµРЅРµСЂС‹ РєРЅРѕРїРѕРє, С‡РµРє-Р±РѕРєСЃРѕРІ Рё С‚.Рґ.
     /// <para>
-    /// Искать начало логики можно здесь
+    /// РСЃРєР°С‚СЊ РЅР°С‡Р°Р»Рѕ Р»РѕРіРёРєРё РјРѕР¶РЅРѕ Р·РґРµСЃСЊ
     /// </para>
     /// <para>
-    /// Конкретные элементы интерфейса и ссылки на их листенеры определены в MainWindowForm.Designer.cs
+    /// РљРѕРЅРєСЂРµС‚РЅС‹Рµ СЌР»РµРјРµРЅС‚С‹ РёРЅС‚РµСЂС„РµР№СЃР° Рё СЃСЃС‹Р»РєРё РЅР° РёС… Р»РёСЃС‚РµРЅРµСЂС‹ РѕРїСЂРµРґРµР»РµРЅС‹ РІ MainWindowForm.Designer.cs
     /// </para>
     /// </summary>
     public partial class MainWindowForm : Form
@@ -24,7 +24,7 @@ namespace GCodeTranslator.Forms.MainWindow
         {
             _logger.LogWithTime("MainWindowForm CONSTR START");
             
-            InitializeComponent(); // Создание интерфейса. Сгененировано автоматически
+            InitializeComponent(); // РЎРѕР·РґР°РЅРёРµ РёРЅС‚РµСЂС„РµР№СЃР°. РЎРіРµРЅРµРЅРёСЂРѕРІР°РЅРѕ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
             CenterToScreen();
             _mainWindowFormService = new MainWindowFormService(this);
             
@@ -32,12 +32,12 @@ namespace GCodeTranslator.Forms.MainWindow
         }
         
 
-        // Ивент загрузки формы
+        // РРІРµРЅС‚ Р·Р°РіСЂСѓР·РєРё С„РѕСЂРјС‹
         private void MainWindowForm_Load(object sender, EventArgs e)
         {
             _logger.LogWithTime("MainWindowForm MainWindowForm_Load START");
 
-            _mainWindowFormService.SetPropertiesFromSettingsHolder(); // Установить значения полей из настроек
+            _mainWindowFormService.SetPropertiesFromSettingsHolder(); // РЈСЃС‚Р°РЅРѕРІРёС‚СЊ Р·РЅР°С‡РµРЅРёСЏ РїРѕР»РµР№ РёР· РЅР°СЃС‚СЂРѕРµРє
             wristComboBox.SelectedIndex = 0;
             armComboBox.SelectedIndex = 1;
             baseComboBox.SelectedIndex = 0;
@@ -52,17 +52,17 @@ namespace GCodeTranslator.Forms.MainWindow
 
 
         /*
-         * Листенеры вкладки Convert
+         * Р›РёСЃС‚РµРЅРµСЂС‹ РІРєР»Р°РґРєРё Convert
          */
 
 
-        // Ивент галочки "PowerMill Export"
+        // РРІРµРЅС‚ РіР°Р»РѕС‡РєРё "PowerMill Export"
         private void PowerMillExportCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             gCodeFilenameLabel.Text = PowerMillExportCheckBox.Checked ? @"PowerMill file name:" : @"GCode filename:";
         }
 
-        // Клик по кнопке "START" на вкладке "Convert". Запускает логику парсинга
+        // РљР»РёРє РїРѕ РєРЅРѕРїРєРµ "START" РЅР° РІРєР»Р°РґРєРµ "Convert". Р—Р°РїСѓСЃРєР°РµС‚ Р»РѕРіРёРєСѓ РїР°СЂСЃРёРЅРіР°
         private void StartButton_Click(object sender, EventArgs e)
         {
             _logger.LogWithTime("MainWindowForm StartButton_Click START");
@@ -74,38 +74,38 @@ namespace GCodeTranslator.Forms.MainWindow
             _logger.LogWithTime("MainWindowForm StartButton_Click END");
         }
         
-        // Ивент галочки "Remove small stop-start"
+        // РРІРµРЅС‚ РіР°Р»РѕС‡РєРё "Remove small stop-start"
         private void RemoveSmallStopStartCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             CheckingDistanceTextBox.Enabled = RemoveSmallStopStartCheckBox.Checked;
         }
 
-        // Клик по кнопке "Open"
+        // РљР»РёРє РїРѕ РєРЅРѕРїРєРµ "Open"
         private void GCodeFilenameButton_Click(object sender, EventArgs e)
         {
             _mainWindowFormService.SelectFile();
         }
 
-        // Ивент галочки "Weld Shield"
+        // РРІРµРЅС‚ РіР°Р»РѕС‡РєРё "Weld Shield"
         private void WeldShieldCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             WeldShieldTextBox.Enabled = WeldShieldCheckBox.Checked;
         }
 
-        // Ивент галочки "Wave enable"
+        // РРІРµРЅС‚ РіР°Р»РѕС‡РєРё "Wave enable"
         private void WaveEnableCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             WaveEnableTextBox.Enabled = WaveEnableCheckBox.Checked;
         }
 
-        // Ивент галочки "Autosplit layers"
+        // РРІРµРЅС‚ РіР°Р»РѕС‡РєРё "Autosplit layers"
         private void AutoSplitLayersCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             SplitLayersTextBox.Enabled = !AutoSplitLayersCheckBox.Checked;
             LaserPassCheckBox.Enabled = AutoSplitLayersCheckBox.Checked;
         }
         
-        // Ивент галочки "Pankratov Angle-Technology"
+        // РРІРµРЅС‚ РіР°Р»РѕС‡РєРё "Pankratov Angle-Technology"
         private void AngleScriptCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             MaxAngleValueTextBox.Enabled = AngleScriptCheckBox.Checked;
@@ -115,11 +115,11 @@ namespace GCodeTranslator.Forms.MainWindow
 
 
         /*
-         * Листенеры вкладки "Send to robot"
+         * Р›РёСЃС‚РµРЅРµСЂС‹ РІРєР»Р°РґРєРё "Send to robot"
          */
 
 
-        // Клик по кнопке "Add"
+        // РљР»РёРє РїРѕ РєРЅРѕРїРєРµ "Add"
         private void AddButton_Click(object sender, EventArgs e)
         {
             _logger.LogWithTime("MainWindowForm AddButton_Click START");
@@ -129,7 +129,7 @@ namespace GCodeTranslator.Forms.MainWindow
             _logger.LogWithTime("MainWindowForm AddButton_Click END");
         }
 
-        // Клик по ячейке таблицы с роботами
+        // РљР»РёРє РїРѕ СЏС‡РµР№РєРµ С‚Р°Р±Р»РёС†С‹ СЃ СЂРѕР±РѕС‚Р°РјРё
         private void RobotsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             _logger.LogWithTime("MainWindowForm RobotsTable_CellClick START, Column" + e.ColumnIndex + ", Row" + e.RowIndex);
@@ -139,7 +139,7 @@ namespace GCodeTranslator.Forms.MainWindow
             _logger.LogWithTime("MainWindowForm RobotsTable_CellClick END");
         }
         
-        // Двойной клик по ячейке (Для включения дебаг мода)
+        // Р”РІРѕР№РЅРѕР№ РєР»РёРє РїРѕ СЏС‡РµР№РєРµ (Р”Р»СЏ РІРєР»СЋС‡РµРЅРёСЏ РґРµР±Р°Рі РјРѕРґР°)
         private void RobotsTable_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             _mainWindowFormService.ResolveDebugModEnable(e);
@@ -148,24 +148,24 @@ namespace GCodeTranslator.Forms.MainWindow
         
         
         /*
-        * Листенеры вкладки "Convert to .tp"
+        * Р›РёСЃС‚РµРЅРµСЂС‹ РІРєР»Р°РґРєРё "Convert to .tp"
         */
         
         
         
-        // Кнопочка "Open" для выбора папки с .ls
+        // РљРЅРѕРїРѕС‡РєР° "Open" РґР»СЏ РІС‹Р±РѕСЂР° РїР°РїРєРё СЃ .ls
         private void OpenLsFolderButton_Click(object sender, EventArgs e)
         {
             _mainWindowFormService.SelectLsFolder();
         }
         
-        // Конопочка "Конвертировать папку"
+        // РљРѕРЅРѕРїРѕС‡РєР° "РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ РїР°РїРєСѓ"
         private void ConvertFolderButton_Click(object sender, EventArgs e)
         {
             _mainWindowFormService.ConvertFolderToTp();
         }
 
-        // Конопочка "Конвертировать файл"
+        // РљРѕРЅРѕРїРѕС‡РєР° "РљРѕРЅРІРµСЂС‚РёСЂРѕРІР°С‚СЊ С„Р°Р№Р»"
         private void ConvertFileButton_Click(object sender, EventArgs e)
         {
             _mainWindowFormService.ConvertFileToTp();
@@ -174,18 +174,18 @@ namespace GCodeTranslator.Forms.MainWindow
 
 
         /*
-         * Листенеры кнопок вкладки "Angle Fix"
+         * Р›РёСЃС‚РµРЅРµСЂС‹ РєРЅРѕРїРѕРє РІРєР»Р°РґРєРё "Angle Fix"
          */
         
         
         
-        // Кнопочка "Open" для выбора папки с .ls
+        // РљРЅРѕРїРѕС‡РєР° "Open" РґР»СЏ РІС‹Р±РѕСЂР° РїР°РїРєРё СЃ .ls
         private void SepLsFolderOpenButton_Click(object sender, EventArgs e)
         {
             _mainWindowFormService.SelectLsFolderForAngleFix();
         }
         
-        // Кнопочка "Пофиксить углы"
+        // РљРЅРѕРїРѕС‡РєР° "РџРѕС„РёРєСЃРёС‚СЊ СѓРіР»С‹"
         private void SepFixAngleButton_Click(object sender, EventArgs e)
         {
             _mainWindowFormService.FixAngles();
@@ -194,12 +194,12 @@ namespace GCodeTranslator.Forms.MainWindow
 
 
         /*
-         * Листенеры кнопок в "Параметры"
+         * Р›РёСЃС‚РµРЅРµСЂС‹ РєРЅРѕРїРѕРє РІ "РџР°СЂР°РјРµС‚СЂС‹"
          */
 
 
 
-        // Клик по кнопке "Настройки"
+        // РљР»РёРє РїРѕ РєРЅРѕРїРєРµ "РќР°СЃС‚СЂРѕР№РєРё"
         private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _mainWindowFormService.ShowSettingsWindowForm();

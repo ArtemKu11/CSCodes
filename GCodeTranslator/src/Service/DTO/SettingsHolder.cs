@@ -1,5 +1,8 @@
 ﻿namespace GCodeTranslator.Service.DTO;
 
+/// <summary>
+/// ДТОшка свойств из окна "Настройки". Используется для сериализации/десериализации в json и для получения актуальных настроек другими формами
+/// </summary>
 public class SettingsHolder
 {
     public bool NextLayerTimerEnabled { get; set; }

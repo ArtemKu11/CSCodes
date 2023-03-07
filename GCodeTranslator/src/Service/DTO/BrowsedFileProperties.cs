@@ -1,5 +1,8 @@
 ﻿namespace GCodeTranslator.Service.DTO;
 
+/// <summary>
+/// ДТОшка с выбранным файлом для парсинга из G-кодов в .ls, содержащая свойства файла (пути, директории)
+/// </summary>
 public struct BrowsedFileProperties
 {
     public string FilePath;  // Полный путь до файла

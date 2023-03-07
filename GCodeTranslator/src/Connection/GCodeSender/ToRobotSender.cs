@@ -9,6 +9,9 @@ using GCodeTranslator.Utils.LogUtils;
 
 namespace GCodeTranslator.Connection.GCodeSender;
 
+/// <summary>
+/// Класс, хранящий логику порядка отправки роботу файлов. Обертка над <see cref="RobotServerConnector"/>
+/// </summary>
 public class ToRobotSender
 {
     private readonly RobotStateProcessor _robotStateProcessor;

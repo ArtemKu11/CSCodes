@@ -2,11 +2,13 @@
 
 namespace GCodeTranslator.Connection.Utils.CheckConnection;
 
-public class ConnectionChecker
+/// <inheritdoc cref="IConnectionChecker"/>
+public class ConnectionChecker: IConnectionChecker
 {
     private readonly CheckConnectionWrapper _checkConnectionWrapper = new();
     
     
+    /// <inheritdoc cref="IConnectionChecker.CheckConnection"/>
     public KeyValuePair<string, string> CheckConnection(string ipAddress, int timeOutInSec, bool requiredForm,  
         bool autoCloseIf0 = true, bool autoCloseIf1 = false, bool autoCloseIf2 = false, bool autoCloseIfMinus1 = false)
     {
@@ -18,6 +20,7 @@ public class ConnectionChecker
         return CheckConnectionWithoutForm(ipAddress, timeOutInSec);
     }
 
+    /// <inheritdoc cref="IConnectionChecker.CheckConnectionWithForm"/>
     public KeyValuePair<string, string> CheckConnectionWithForm(string ipAddress, int timeOutInSec, 
         bool autoCloseIf0 = true, bool autoCloseIf1 = false, bool autoCloseIf2 = false, bool autoCloseIfMinus1 = false)
     {
@@ -26,6 +29,7 @@ public class ConnectionChecker
         return checkConnectionForm.Result;
     }
     
+    /// <inheritdoc cref="IConnectionChecker.CheckConnectionWithoutForm"/>
     public KeyValuePair<string, string> CheckConnectionWithoutForm(string ipAddress, int timeOutInSec)
     {
         try

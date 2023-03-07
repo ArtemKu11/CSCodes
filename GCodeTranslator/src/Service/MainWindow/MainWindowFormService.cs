@@ -20,6 +20,9 @@ using GCodeTranslator.Utils.LogUtils;
 
 namespace GCodeTranslator.Service.MainWindow;
 
+/// <summary>
+/// Сервис для <see cref="MainWindowForm"/>. Инкапсулирует логику
+/// </summary>
 public class MainWindowFormService
 {
     private readonly MainWindowForm _mainWindowForm;
@@ -38,7 +41,7 @@ public class MainWindowFormService
         
         _mainWindowForm = mainWindowForm;
         _settingsHolder = InitializeActualSettings();
-        ToTpConverter.StartTpConvertingServer();
+        ToTpConverter.StartTpConvertingServer();  // Запуск python-сервера конвертера в .tp
 
     }
 

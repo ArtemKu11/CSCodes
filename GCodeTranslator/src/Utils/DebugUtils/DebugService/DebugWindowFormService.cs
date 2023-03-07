@@ -7,6 +7,9 @@ using GCodeTranslator.Utils.DebugUtils.StatusLabelProcessor;
 
 namespace GCodeTranslator.Utils.DebugUtils.DebugService;
 
+/// <summary>
+/// Сервис к <see cref="DebugWindowForm"/>. Инкапсулирует логику
+/// </summary>
 public class DebugWindowFormService
 {
     private readonly DebugWindowForm _debugWindowForm;

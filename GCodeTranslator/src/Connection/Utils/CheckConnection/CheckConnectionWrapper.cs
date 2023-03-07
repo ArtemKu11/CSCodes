@@ -5,6 +5,22 @@ using NetMQ.Sockets;
 
 namespace GCodeTranslator.Connection.Utils.CheckConnection;
 
+/// <summary>
+/// Обертка над функцией CheckConnection(). Проверяет связь с роботом. Обособленное использование объектов этого класса
+/// не предполагается.
+/// <para>
+/// См. <see cref="ConnectionChecker"/>
+/// </para>
+/// Ответы сервера:
+/// <para>
+/// 0 - готов
+/// </para>
+/// 1 - печатает
+/// <para>
+/// 2 - требуется файл
+/// </para>
+/// 3 - TimeoutException
+/// </summary>
 public class CheckConnectionWrapper
 {
     private static bool _debugModeEnabled;
@@ -43,7 +59,7 @@ public class CheckConnectionWrapper
         using (var socket = new RequestSocket())
         {
             Thread.Sleep(100);
-            firstMessage = TryToReceiveMessage(socket);
+            firstMessage = TryToReceiveMessage(socket);  // Логика с двумя одинаковыми запросами - оригинальная
             secondMessage = TryToReceiveMessage(socket);
         }
 

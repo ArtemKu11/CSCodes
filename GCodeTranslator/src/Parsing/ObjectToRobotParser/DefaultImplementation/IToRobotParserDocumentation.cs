@@ -13,12 +13,10 @@ namespace GCodeTranslator.Parsing.ObjectToRobotParser.DefaultImplementation;
 /// Результат:
 /// </para>
 /// <para>
-/// Если есть галочка "Autosplit layers" - сохраняет один .ls файл, запускает питон-слайсер.
-///                                        Питон-слайсер скорей всего дробит по слоям этот файл в несколько .ls
+/// Если есть галочка "Autosplit layers" - сохраняет один .ls файл.
 /// </para>
 /// <para>
 /// Если нет галочки "Autosplit layers" - сохраняет несколько .ls файлов. Количество точек в каждом слое - значение поля "Split layers".
-///                                      Питон-слайсер не запускает
 /// </para>
 /// </summary>
 public interface IToRobotParserDocumentation : IToRobotParser
@@ -43,12 +41,10 @@ public interface IToRobotParserDocumentation : IToRobotParser
     /// Возвращает:
     /// </para>
     /// <para>
-    /// Если есть галочка "Autosplit layers" - сохраняет один .ls файл, запускает питон-слайсер.
-    ///                                        Питон-слайсер скорей всего дробит по слоям этот файл в несколько .ls
+    /// Если есть галочка "Autosplit layers" - сохраняет один .ls файл
     /// </para>
     /// <para>
     /// Если нет галочки "Autosplit layers" - сохраняет несколько .ls файлов. Количество точек в каждом слое - значение поля "Split layers".
-    ///                                      Питон-слайсер не запускает
     /// </para>
     /// </summary>
     new void Parse();

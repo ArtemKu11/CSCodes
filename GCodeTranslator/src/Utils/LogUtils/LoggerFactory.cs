@@ -1,5 +1,14 @@
 ﻿namespace GCodeTranslator.Utils.LogUtils;
 
+/// <summary>
+/// Factory для создания логгеров
+/// <para></para>
+/// Appendable - пишет всегда. Раз в 5-10 МБ очищает
+/// <para>
+/// Обычный - перезаписывается при запуске приложения
+/// </para>
+/// Для создания передать название .log файла без ".log" и без "appendabe_" в случае, если нужен AppendableLogger
+/// </summary>
 public static class LoggerFactory
 {
     private static readonly Dictionary<string, Logger> ExistingLoggers = new();
@@ -12,6 +21,11 @@ public static class LoggerFactory
         set => _enabled = value;
     }
     
+    /// <summary>
+    /// Создает или возвращает существующий обычный логгер. Перезаписывается каждый раз при запуске приложения. Работает по галочке в настройках
+    /// </summary>
+    /// <param name="name">Имя .log файла без ".log" и "appendable_"</param>
+    /// <returns>Синглтон экземпляр логгера под соответсвующий .log файл</returns>
     public static Logger GetExistingOrCreateNewLogger(string name)
     {
         lock (_locker)
@@ -40,6 +54,11 @@ public static class LoggerFactory
         }
     }
     
+    /// <summary>
+    /// Создает или возвращает существующий Appendable логгер. Перезаписывается раз 5-10 МБ. Работает вне зависимости от галочки в настройках
+    /// </summary>
+    /// <param name="name">Имя .log файла без ".log"</param>
+    /// <returns>Синглтон экземпляр логгера под соответсвующий .log файл</returns>
     public static Logger GetAppendableLogger(string name)
     {
         lock (_locker)

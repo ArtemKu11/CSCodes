@@ -5,6 +5,9 @@ using GCodeTranslator.Utils.LogUtils;
 
 namespace GCodeTranslator.Parsing.PostProcessors.AngleFixPostProcessor;
 
+/// <summary>
+/// Фиксит резкое и большое изменение углов. Работает по галочке "Pankratov Angle-Fix"
+/// </summary>
 public class PythonAngleFixPostProcessor : IPostProcessor
 {
     private readonly IToRobotParser? _previousParser;
@@ -26,7 +29,11 @@ public class PythonAngleFixPostProcessor : IPostProcessor
     {
         return _propertiesForParsers;
     }
-
+    
+    /// <summary>
+    /// <para>Запускает предыдущую логику</para>
+    /// <inheritdoc cref="PythonAngleFixPostProcessor"/>
+    /// </summary>
     public void PostProcess()
     {
         RunPreviousLogic();

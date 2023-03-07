@@ -1,5 +1,22 @@
-﻿namespace GCodeTranslator.Connection.Utils.ZHandler;
+﻿using GCodeTranslator.Connection.GCodeSender;
+using GCodeTranslator.Connection.Utils.InfoTextBoxChangeProcessor;
+using GCodeTranslator.Forms.RobotConnectionWindow;
 
+namespace GCodeTranslator.Connection.Utils.ZHandler;
+
+
+/// <summary>
+/// Очередная тумманная оригинальная логика.
+/// <para>
+/// Суть - принтовать в _infoTextBox в <see cref="RobotConnectionForm"/>
+/// изменение координаты z.
+/// </para>
+/// Этот класс не занимается принтованием, а лишь готовит строку для принта. Принт запускается явно в <see cref="ToRobotSender"/>
+/// при помощи <see cref="InfoTextBoxProcessor"/>
+/// <para>
+/// Ньюанс заключается в том, что сервер отвечает всегда с константной z, а потому и изменение никогда не принтуется
+/// </para>
+/// </summary>
 public class ZCoordinateHandler
 {
     private float _currentZCoord;

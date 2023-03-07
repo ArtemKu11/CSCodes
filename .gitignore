@@ -18,14 +18,12 @@
 .packages/
 
 # Build results
-[Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
 x64/
 x86/
 bld/
-[Bb]in/
 [Oo]bj/
 [Ll]og/
 
@@ -375,3 +373,8 @@ Temporary Items
 InteropTests/NativeTests/out
 /src/System.Windows.Forms/src/comctl32.dll
 *.received.*
+*/bin/Debug/net6.0-windows/*
+*/bin/Debug/net6.0-windows/Scripts/venv
+!*/bin/Debug/net6.0-windows/Scripts/
+!*/bin/Debug/net6.0-windows/JSON/
+

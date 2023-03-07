@@ -1,8 +1,14 @@
 ﻿using System.Text.Json;
+using GCodeTranslator.Forms.SettingsWindow;
 using GCodeTranslator.Service.DTO;
 
 namespace GCodeTranslator.Service.SettingsWindow;
 
+/// <summary>
+/// Класс, использующийся для сериализации/десериалиации настроек <see cref="SettingsWindowForm"/> в json
+/// <para></para>
+/// Необходим для реализации кнопок "Сохранить" и "Отменить" в <see cref="SettingsWindowForm"/>
+/// </summary>
 public class SettingsLoader
 {
     public void WriteSettingsOnDisk(SettingsHolder settingsHolder)

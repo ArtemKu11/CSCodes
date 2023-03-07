@@ -5,6 +5,12 @@ using GCodeTranslator.Utils.LogUtils;
 
 namespace GCodeTranslator.Parsing.PostProcessors.SlicePostProcessor;
 
+/// <summary>
+/// Запускается на директории с .ls файлом после парсинга. Запускает питон слайсер. Бьет .ls по слоям.
+/// <para>
+/// Работает по галочке "Autosplit layers"
+/// </para>
+/// </summary>
 public class PythonSlicePostProcessor : IPostProcessor
 {
     private readonly IToRobotParser? _previousParser;
@@ -27,8 +33,11 @@ public class PythonSlicePostProcessor : IPostProcessor
     {
         return _propertiesForParsers;
     }
-
-
+    
+    /// <summary>
+    /// <para>Запускает предыдущую логику</para>
+    /// <inheritdoc cref="PythonSlicePostProcessor"/>
+    /// </summary>
     public void PostProcess()
     {
         RunPreviousLogic();

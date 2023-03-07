@@ -2,6 +2,9 @@
 
 namespace GCodeTranslator.Utils.DebugUtils.StatusLabelProcessor;
 
+/// <summary>
+/// Thread-safety изменение _statusHolderLabel в <see cref="DebugWindowForm"/>
+/// </summary>
 public class StatusLabelChangeProcessor
 {
     private readonly DebugWindowForm _debugWindowForm;

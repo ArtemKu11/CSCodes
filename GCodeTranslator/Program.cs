@@ -1,15 +1,17 @@
+using GCodeTranslator.CmdProcessRunner;
 using GCodeTranslator.Forms.MainWindow;
+using GCodeTranslator.Parsing.TpConverter;
 
 namespace GCodeTranslator
 {
     
     /*
-     * Приложение переписано с оригинального транслятора, связь с автором которого утеряна
+     * Приложение переписано с оригинального транслятора
      * Архитектурно - это новое приложение
      * Функционал - сохранен полностью
      * Часть логики скопирована полностью с целью сохранения функционала (нереально понять что там происходит)) ). Помечена соответствующим комментарием
      * 
-     * Для большинства классов есть интерфейсы с комментариями
+     * Для некоторых классов есть интерфейсы с комментариями
      * Над каждым классом есть комментарий с описанием
      */
     internal static class Program
@@ -20,6 +22,10 @@ namespace GCodeTranslator
         [STAThread]
         private static void Main()
         {
+            var defaultPythonPath = "python";
+            var venvPythonPath = @"Scripts\venv\Scripts\python";
+            ProcessRunner.PythonPath = venvPythonPath;
+            
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();

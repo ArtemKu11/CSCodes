@@ -1,7 +1,11 @@
 ﻿namespace GCodeTranslator.Connection.DTO;
 
+/// <summary>
+/// ДТОшка информации об отправляемом файле. Отправляется роботу сразу после файла
+/// </summary>
 public class SendFileInfo
 {
+    // Комментарии ниже - оригинальные
     private string _currentFileName = "None"; // директория текущего файла (Название текущего файла)
     private string _nextFilePath = "None"; // директория следующего файла при непрерывной печати
     private bool _isStart; //начать печать

@@ -12,21 +12,25 @@ using GCodeTranslator.Utils.LogUtils;
 
 namespace GCodeTranslator.Service.RobotConnectionWindow;
 
+
+/// <summary>
+/// Сервис для <see cref="RobotConnectionForm"/>. Инкапсулирует логику
+/// </summary>
 public class RobotConnectionFormService
 {
     private readonly RobotConnectionForm _robotConnectionForm;
     private readonly RequiredPropertiesForConnection _propertiesForConnection;
-    private readonly RobotServerConnector _robotServerConnector;
+    private readonly RobotServerConnector _robotServerConnector;  // Содержит основные методы взаимодействия с сервером робота
     
-    private readonly InfoTextBoxProcessor _infoTextProcessor;
-    private readonly RobotStateProcessor _robotStateProcessor;
-    private readonly LayersComboBoxProcessor _layersComboBoxProcessor;
+    private readonly InfoTextBoxProcessor _infoTextProcessor;  // Для Thread-safety изменения _infoTextBox
+    private readonly RobotStateProcessor _robotStateProcessor;  // Для Thread-safety изменения свойств, отображающих состояние печати в формах
+    private readonly LayersComboBoxProcessor _layersComboBoxProcessor;  // Для Thread-safety изменения выбранного слоя в _layersComboBox при автоматической подаче слоев
     
-    private readonly ToTpConverterStateTimer _tpStatePrintingTimer;
+    private readonly ToTpConverterStateTimer _tpStatePrintingTimer;  // Оригинальная туманная логика логика
     private CancellationTokenSource _tokenSource = new();
-    private CancellationToken _cancellationToken;
+    private CancellationToken _cancellationToken;  // Для реализации кнопки "Сброс"
     
-    private BrowsedFilesToPrint _browsedFilesToPrint;
+    private BrowsedFilesToPrint _browsedFilesToPrint;  // Выбранные файлы для печати
     
     private readonly Logger _exceptionLogger = LoggerFactory.GetExistingOrCreateNewLogger("exception_log");
     private readonly Logger _logger = LoggerFactory.GetAppendableLogger("root_log");
@@ -103,7 +107,7 @@ public class RobotConnectionFormService
         if (selectedDirectory == null) return;
         ClearLayerComboBox();
         _robotConnectionForm.FolderTextBox.Text = selectedDirectory;
-        HandleSelectedDirectoryFiles(selectedDirectory);
+        HandleSelectedDirectoryFiles(selectedDirectory);  // Почему именно так написана эта функция - не знаю. Сохранил как в оригинале
         ResolveLayerComboBoxDropDownSize();
         
     }
@@ -150,6 +154,7 @@ public class RobotConnectionFormService
         return null;
     }
 
+    // Почему именно так написана эта функция - не знаю. Сохранил как в оригинале, разве что разбил на несколько поменьше
     private void HandleSelectedDirectoryFiles(string selectedDirectory)
     {
         
@@ -344,7 +349,7 @@ public class RobotConnectionFormService
         
         if (IsConnectionSuccessful())
         {
-            RefreshCancellationToken();
+            RefreshCancellationToken();  // Нужно для корректной работы после нажатия кнопки "Сброс"
             var printTask = new Task(() =>
             {
                 try
@@ -358,7 +363,7 @@ public class RobotConnectionFormService
                     throw;
                 }
             });
-            printTask.Start();
+            printTask.Start();  // Запустить печать и освободить поток
         }
         
         _logger.LogWithTime("RobotConnectionFormServce StartPrinting END");
@@ -396,7 +401,7 @@ public class RobotConnectionFormService
             toRobotSender.PrintAll();
         }
         
-        AfterPrintingProcessing(cancellationToken);
+        AfterPrintingProcessing(cancellationToken);  // Передача токена необходима, т.к. можно намутить "Сброс" + "Начать печать" + RefreshToken
         
     }
 

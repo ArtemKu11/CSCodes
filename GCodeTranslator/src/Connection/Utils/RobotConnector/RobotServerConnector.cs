@@ -7,7 +7,9 @@ using NetMQ.Sockets;
 
 namespace GCodeTranslator.Connection.Utils.RobotConnector;
 
-public class RobotServerConnector
+
+/// <inheritdoc cref="IRobotServerConnector"/>
+public class RobotServerConnector : IRobotServerConnector
 {
     private static bool _debugModeEnabled;
     private readonly string _ipAddress;

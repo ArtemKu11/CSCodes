@@ -2,6 +2,10 @@
 
 namespace GCodeTranslator.Connection.Utils.InfoTextBoxChangeProcessor;
 
+/// <summary>
+/// Класс, предназначенный для Thread-safety изменения текста в _infoTextBox в <see cref="RobotConnectionForm"/>
+/// в не зависимости от потока, в котором используется
+/// </summary>
 public class InfoTextBoxProcessor
 {
     private readonly object _locker = new();

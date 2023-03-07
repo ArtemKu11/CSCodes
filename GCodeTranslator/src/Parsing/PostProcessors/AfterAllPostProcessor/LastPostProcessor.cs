@@ -5,6 +5,10 @@ using GCodeTranslator.Utils.LogUtils;
 
 namespace GCodeTranslator.Parsing.PostProcessors.AfterAllPostProcessor;
 
+/// <summary>
+/// Кидает MessageBox с "done" и открывает директорию с результатом
+/// Запускается в самом конце парсинга
+/// </summary>
 public class LastPostProcessor : IPostProcessor
 {
     private readonly IToRobotParser? _previousParser;
@@ -29,6 +33,7 @@ public class LastPostProcessor : IPostProcessor
     }
 
 
+    /// Запускает предыдущую логику, кидает MessageBox с "done" и открывает директорию с результатом
     public void PostProcess()
     {
         RunPreviousLogic();

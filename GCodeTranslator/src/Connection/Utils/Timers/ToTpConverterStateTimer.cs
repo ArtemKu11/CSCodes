@@ -1,10 +1,20 @@
 ﻿using GCodeTranslator.Connection.Utils.InfoTextBoxChangeProcessor;
+using GCodeTranslator.Forms.RobotConnectionWindow;
 using NetMQ;
 using NetMQ.Sockets;
 using Timer = System.Windows.Forms.Timer;
 
 namespace GCodeTranslator.Connection.Utils.Timers;
 
+
+/// <summary>
+/// Какая-то костыльная оригинальная логика, вынесенная мной в отдельный модуль
+/// <para>
+/// После конвертации файлов в .tp по кнопке "Экспорт в TP" в <see cref="RobotConnectionForm"/>
+/// обращается к конвертеру раз в 2 секунды и принтует в _infoTextBox ответ. Прекращает свое действие по кнопке "Сброс"
+/// в <see cref="RobotConnectionForm"/>
+/// </para>
+/// </summary>
 public class ToTpConverterStateTimer
 {
     private readonly InfoTextBoxProcessor _infoTextProcessor;

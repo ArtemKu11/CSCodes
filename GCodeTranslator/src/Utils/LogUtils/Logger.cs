@@ -1,5 +1,13 @@
 ﻿namespace GCodeTranslator.Utils.LogUtils;
 
+/// <summary>
+/// Создание экземпляров предполагается через LoggerFactory. Как правило на один .log файл один логгер
+/// <para></para>
+/// Appendable - пишет всегда. Раз в 5-10 МБ очищает
+/// <para>
+/// Обычный - перезаписывается при запуске приложения
+/// </para>
+/// </summary>
 public class Logger
 {
     private readonly string _loggerPath;

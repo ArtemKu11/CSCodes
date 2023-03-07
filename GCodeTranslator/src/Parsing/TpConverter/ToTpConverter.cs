@@ -1,8 +1,17 @@
 ﻿using System.Diagnostics;
 using GCodeTranslator.CmdProcessRunner;
+using NetMQ;
+using NetMQ.Sockets;
 
 namespace GCodeTranslator.Parsing.TpConverter;
 
+/// <summary>
+/// Конвертер из .ls в .tp
+/// <para>
+/// Для одного файла запускает консольную команду "maketp"
+/// </para>
+/// Для директории - отправляет python-конвертеру
+/// </summary>
 public class ToTpConverter
 {
     private static Process? _toTpConverterProcess;
@@ -19,7 +28,13 @@ public class ToTpConverter
     
     public string ConvertAllFiles(string fileDirectory)
     {
-        return new ProcessRunner().RunConvertToTpAllFilesProcess(fileDirectory);
+        using (var client = new RequestSocket())
+        {
+            client.Connect($"tcp://localhost:5001");
+            client.SendFrame($"path${fileDirectory}");
+            var message = client.ReceiveFrameString();
+            return message;
+        }
     }
     
     

@@ -3,6 +3,12 @@ using GCodeTranslator.Service.DTO;
 
 namespace GCodeTranslator.Service.SettingsWindow;
 
+
+/// <summary>
+/// Сервис к <see cref="SettingsWindowForm"/>. Особо ничего важного не делает.
+/// Реализует логику окна. Нужен для того, чтобы другим формам получать
+/// <see cref="SettingsHolder"/>
+/// </summary>
 public class SettingsWindowFormService
 {
     private readonly SettingsWindowForm _settingsWindowForm;

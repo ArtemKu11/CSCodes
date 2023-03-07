@@ -156,10 +156,7 @@ public class ToRobotParser : IToRobotParserDocumentation
         return _propertiesForParsers;
     }
 
-
-    /// <summary>
     /// <inheritdoc cref="IToRobotParserDocumentation.Parse()"/>
-    /// </summary>
     public void Parse()
     {
         _logger.LogWithTime("ToRobotParser Parse START");

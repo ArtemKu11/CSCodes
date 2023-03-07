@@ -3,6 +3,11 @@ using GCodeTranslator.Forms.RobotConnectionWindow;
 
 namespace GCodeTranslator.Connection.Utils.RobotStateChangeProcessor;
 
+/// <summary>
+/// Класс, предназначенный для Thread-safety изменения текста свойств, отражающих состояние робота (_robotStateCell
+/// в <see cref="MainWindowForm"/>, _robotStateLabel в <see cref="RobotConnectionForm"/>),
+/// в не завсисимости от потока, в котором используется
+/// </summary>
 public class RobotStateProcessor
 {
     private readonly object _locker = new();
@@ -23,18 +28,21 @@ public class RobotStateProcessor
     
     
     
+    // Сначала получить данные с Main формы
     public void SetMainFormProperties(MainWindowForm mainWindowForm, DataGridViewCell robotStateCell)
     {
         _mainWindowForm = mainWindowForm;
         _robotStateCell = robotStateCell;
     }
 
+    // Потом с RobotConnectionForm
     public void SetRobotConnectionFormProperties(RobotConnectionForm robotConnectionForm, Label robotStateLabel)
     {
         _robotConnectionForm = robotConnectionForm;
         _robotStateLabel = robotStateLabel;
     }
-    
+   
+    // Потом использовать
     public void SetState(string line, Color color)
     {
         lock (_locker)

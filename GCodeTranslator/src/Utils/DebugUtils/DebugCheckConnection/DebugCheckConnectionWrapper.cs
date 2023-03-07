@@ -1,4 +1,6 @@
-﻿using GCodeTranslator.Utils.DebugUtils.MessageBoxWithTextBox;
+﻿using GCodeTranslator.Connection.Utils.CheckConnection;
+using GCodeTranslator.Utils.DebugUtils.DebugWindow;
+using GCodeTranslator.Utils.DebugUtils.MessageBoxWithTextBox;
 using GCodeTranslator.Utils.DebugUtils.StatusLabelProcessor;
 using GCodeTranslator.Utils.LogUtils;
 using NetMQ;
@@ -6,6 +8,11 @@ using NetMQ.Sockets;
 
 namespace GCodeTranslator.Utils.DebugUtils.DebugCheckConnection;
 
+/// <summary>
+/// Подсовывается вместо обычного <see cref="CheckConnectionWrapper"/> в <see cref="ConnectionChecker"/>
+/// при включении дебаг-режима. Отключает соединение с сервером. Возвращает определенный в <see cref="DebugWindowForm"/>
+/// результат проверки соединения
+/// </summary>
 public class DebugCheckConnectionWrapper
 {
     private static readonly object Locker = new();
