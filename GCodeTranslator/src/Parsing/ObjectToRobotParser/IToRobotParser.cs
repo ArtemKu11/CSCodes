@@ -3,14 +3,6 @@ using GCodeTranslator.Parsing.FileToObjectParsers;
 
 namespace GCodeTranslator.Parsing.ObjectToRobotParser;
 
-
-/*
- * Назначение - принимать в конструктор IToObjectParser, запускать его логику,
- * а зачем парсить полученный List<GCodePoint>
- *
- * 
- */
-
 /// <summary>
 /// Назначение - принимать в конструктор <see cref="IToObjectParser"/>, запускать его логику,
 /// а зачем парсить полученный List of <see cref="GCodePoint"/>

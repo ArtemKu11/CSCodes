@@ -23,17 +23,17 @@ public class RobotConnectionFormService
     private readonly RobotServerConnector _robotServerConnector;  // Содержит основные методы взаимодействия с сервером робота
     
     private readonly InfoTextBoxProcessor _infoTextProcessor;  // Для Thread-safety изменения _infoTextBox
-    private readonly RobotStateProcessor _robotStateProcessor;  // Для Thread-safety изменения свойств, отображающих состояние печати в формах
+    private readonly RobotStateLabelProcessor _robotStateLabelProcessor;  // Для Thread-safety изменения свойств, отображающих состояние печати в формах
     private readonly LayersComboBoxProcessor _layersComboBoxProcessor;  // Для Thread-safety изменения выбранного слоя в _layersComboBox при автоматической подаче слоев
     
-    private readonly ToTpConverterStateTimer _tpStatePrintingTimer;  // Оригинальная туманная логика логика
+    private readonly ToTpConverterStateTimer _tpStatePrintingTimer;  // Оригинальная туманная логика
     private CancellationTokenSource _tokenSource = new();
     private CancellationToken _cancellationToken;  // Для реализации кнопки "Сброс"
     
     private BrowsedFilesToPrint _browsedFilesToPrint;  // Выбранные файлы для печати
     
-    private readonly Logger _exceptionLogger = LoggerFactory.GetExistingOrCreateNewLogger("exception_log");
-    private readonly Logger _logger = LoggerFactory.GetAppendableLogger("root_log");
+    private readonly Logger _exceptionLogger = LoggerFactory.GetAppendableLogger("exception_log");
+    private readonly Logger _logger = LoggerFactory.GetExistingOrCreateNewLogger("root_log");
 
 
 
@@ -44,7 +44,7 @@ public class RobotConnectionFormService
         _propertiesForConnection = propertiesForConnection;
         _robotServerConnector = propertiesForConnection.RobotServerConnector;
         
-        _robotStateProcessor = ResolveRobotStateProcessor();
+        _robotStateLabelProcessor = ResolveRobotStateProcessor();
         _infoTextProcessor = CreateInfoTextBoxProcessor();
         _layersComboBoxProcessor = new LayersComboBoxProcessor(_robotConnectionForm.LayersComboBox, _robotConnectionForm);
         
@@ -55,10 +55,10 @@ public class RobotConnectionFormService
         
     }
     
-    private RobotStateProcessor ResolveRobotStateProcessor()
+    private RobotStateLabelProcessor ResolveRobotStateProcessor()
     {
         
-        var robotStateProcessor = _propertiesForConnection.RobotStateProcessor;
+        var robotStateProcessor = _propertiesForConnection.RobotStateLabelProcessor;
         robotStateProcessor.SetRobotConnectionFormProperties(_robotConnectionForm, _robotConnectionForm.RobotStateLabel);
         robotStateProcessor.SetState(_propertiesForConnection.StateBeforeOpenForm, _propertiesForConnection.ColorOfStateBeforeOpenForm);
         
@@ -337,9 +337,10 @@ public class RobotConnectionFormService
         ClearLayerComboBox();
         _robotConnectionForm.AwaitLayerCheckBox.Checked = false;
         _robotConnectionForm.ExportOneCheckBox.Checked = false;
-        _robotStateProcessor.SetState("Unknown state", Color.Black);
+        _robotStateLabelProcessor.SetState("Unknown state", Color.Black);
         _robotConnectionForm.StartPrintingButton.Enabled = false;
         _robotConnectionForm.PrintInfoTextBox.Text = "";
+        _tpStatePrintingTimer.Stop();
         
     }
 
@@ -389,7 +390,7 @@ public class RobotConnectionFormService
         _robotConnectionForm.Invoke(DisableForm);
 
         var startId = _robotConnectionForm.Invoke(GetStartId);
-        var toRobotSender = new ToRobotSender(_robotStateProcessor, _infoTextProcessor, _layersComboBoxProcessor, _robotServerConnector, _browsedFilesToPrint,
+        var toRobotSender = new ToRobotSender(_robotStateLabelProcessor, _infoTextProcessor, _layersComboBoxProcessor, _robotServerConnector, _browsedFilesToPrint,
             startId, cancellationToken);
         
         if (_robotConnectionForm.AwaitLayerCheckBox.Checked)
@@ -435,12 +436,12 @@ public class RobotConnectionFormService
         
         if (_cancellationToken.IsCancellationRequested)
         {
-            _robotStateProcessor.SetState("Unknown state", Color.Black);
+            _robotStateLabelProcessor.SetState("Unknown state", Color.Black);
 
         }
         else
         {
-            _robotStateProcessor.SetState("Ready to print", Color.Green);
+            _robotStateLabelProcessor.SetState("Ready to print", Color.Green);
             _infoTextProcessor.PrintLine("Печать завершена!");
         }
         
@@ -490,19 +491,19 @@ public class RobotConnectionFormService
         switch (state)
         {
             case "0":  // Готов
-                _robotStateProcessor.SetState("Ready to print", Color.Green);
+                _robotStateLabelProcessor.SetState("Ready to print", Color.Green);
                 break;
             case "1":  // Печать
-                _robotStateProcessor.SetState("Printing file", Color.Green);
+                _robotStateLabelProcessor.SetState("Printing file", Color.Green);
                 break;
             case "2":  // Необходим файл
-                _robotStateProcessor.SetState("File required / Printing file", Color.Green);
+                _robotStateLabelProcessor.SetState("File required / Printing file", Color.Green);
                 break;
             case "-1":  // TimeoutException
-                _robotStateProcessor.SetState("Сервер не отвечает", Color.Red);
+                _robotStateLabelProcessor.SetState("Сервер не отвечает", Color.Red);
                 break;
             default:
-                _robotStateProcessor.SetState("Connection Error", Color.Red);
+                _robotStateLabelProcessor.SetState("Connection Error", Color.Red);
                 break;
         }
         

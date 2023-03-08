@@ -30,7 +30,7 @@ public interface IRobotServerConnector
     public void SendFile(string fileName, string filePath);
 
     /// <summary>
-    /// Отправляет роботу информацию о прежду отправленном файле. Как правило, выполняется сразу после <see cref="SendFile"/>
+    /// Отправляет роботу информацию о прежде отправленном файле. Как правило, выполняется сразу после <see cref="SendFile"/>
     /// </summary>
     /// <param name="sendFileInfo">ДТОшка информации о файле</param>
     /// <returns>Возвращает ответ сервера</returns>

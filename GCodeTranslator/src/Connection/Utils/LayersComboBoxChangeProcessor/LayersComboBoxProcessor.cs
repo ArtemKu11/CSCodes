@@ -4,7 +4,7 @@ namespace GCodeTranslator.Connection.Utils.LayersComboBoxChangeProcessor;
 
 /// <summary>
 /// Класс, предназначенный для Thread-safety изменения выбранного слоя в _layersComboBox в <see cref="RobotConnectionForm"/>
-/// в не зависимости от потока, в котором используется
+/// вне зависимости от потока, в котором используется
 /// </summary>
 public class LayersComboBoxProcessor
 {

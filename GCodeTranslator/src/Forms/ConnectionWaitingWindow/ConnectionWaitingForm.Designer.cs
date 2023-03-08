@@ -1,4 +1,4 @@
-﻿namespace GCodeTranslator.Forms.ConnectionWaitingWindowForm
+﻿namespace GCodeTranslator.Forms.ConnectionWaitingWindow
 {
     partial class CheckConnectionForm
     {

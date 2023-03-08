@@ -14,14 +14,14 @@ namespace GCodeTranslator.Connection.GCodeSender;
 /// </summary>
 public class ToRobotSender
 {
-    private readonly RobotStateProcessor _robotStateProcessor;
-    private readonly InfoTextBoxProcessor _infoTextBoxProcessor;
-    private readonly LayersComboBoxProcessor _layersComboBoxProcessor;
-    private readonly ZCoordinateHandler _zCoordinateHandler;
+    private readonly RobotStateLabelProcessor _robotStateLabelProcessor;  // Для Thread-safety изменения свойств, отображающих состояние печати в формах
+    private readonly InfoTextBoxProcessor _infoTextBoxProcessor;  // Для Thread-safety изменения _infoTextBox
+    private readonly LayersComboBoxProcessor _layersComboBoxProcessor;  // Для Thread-safety изменения выбранного слоя в _layersComboBox при автоматической подаче слоев
+    private readonly ZCoordinateHandler _zCoordinateHandler;  // Готовит строку с z-координатой для принта _infoTextBoxProcessor'ом
 
     
-    private readonly RobotServerConnector _serverConnector;
-    private readonly BrowsedFilesToPrint _filesToPrint;
+    private readonly RobotServerConnector _serverConnector;    // Содержит основные методы взаимодействия с сервером робота
+    private readonly BrowsedFilesToPrint _filesToPrint;  // Выбранные файлы для печати
     private int _currentPrintingFileNumber;
     
     private readonly CancellationToken _cancellationToken;
@@ -30,13 +30,13 @@ public class ToRobotSender
     private readonly Logger _logger = LoggerFactory.GetExistingOrCreateNewLogger("root_log");
 
 
-    public ToRobotSender(RobotStateProcessor robotStateProcessor, InfoTextBoxProcessor infoTextBoxProcessor, LayersComboBoxProcessor layersComboBoxProcessor,
+    public ToRobotSender(RobotStateLabelProcessor robotStateLabelProcessor, InfoTextBoxProcessor infoTextBoxProcessor, LayersComboBoxProcessor layersComboBoxProcessor,
         RobotServerConnector serverConnector, BrowsedFilesToPrint filesToPrint, int startId, CancellationToken cancellationToken)
     {
         _logger.LogWithTime("ToRobotSender CONSTR START");
         _logger.Log(filesToPrint + "\n" + "Стартовый id: " + startId);
         
-        _robotStateProcessor = robotStateProcessor;
+        _robotStateLabelProcessor = robotStateLabelProcessor;
         _infoTextBoxProcessor = infoTextBoxProcessor;
         _layersComboBoxProcessor = layersComboBoxProcessor;
         _zCoordinateHandler = new ZCoordinateHandler();
@@ -104,7 +104,7 @@ public class ToRobotSender
         while (!IsSendNextFile())
         {
             if (_cancellationToken.IsCancellationRequested) return;
-            Thread.Sleep(100);
+            Thread.Sleep(2000);
         }
         
 
@@ -112,7 +112,7 @@ public class ToRobotSender
     
     private void HandleEmptyTp()
     {
-        _robotStateProcessor.SetState("Ошибка. Не найдено файлов .tp для отправки", Color.Orange);
+        _robotStateLabelProcessor.SetState("Ошибка. Не найдено файлов .tp для отправки", Color.Orange);
         _infoTextBoxProcessor.PrintLine("Ошибка. Не найдено файлов .tp для отправки");
     }
     
@@ -122,7 +122,7 @@ public class ToRobotSender
 
         var message = $"Printing file {_currentPrintingFileNumber + 1}/{_filesToPrint.Count}";
         _infoTextBoxProcessor.PrintLine(message, checkDuplicate);
-        _robotStateProcessor.SetState(message, Color.Green);
+        _robotStateLabelProcessor.SetState(message, Color.Green);
     }
 
     private bool IsSendNextFile()
@@ -140,7 +140,7 @@ public class ToRobotSender
         switch (state)
         {
             case "0":  // Готов
-                _robotStateProcessor.SetState("Ready to print", Color.Green);
+                _robotStateLabelProcessor.SetState("Ready to print", Color.Green);
                 if (_isFilePrinted)
                 {
                     _isFilePrinted = false;
@@ -156,10 +156,10 @@ public class ToRobotSender
             case "-1":  // TimeoutException
                 var message = "Сервер не отвечает";
                 _infoTextBoxProcessor.PrintLine(message);
-                _robotStateProcessor.SetState(message, Color.Red);
+                _robotStateLabelProcessor.SetState(message, Color.Red);
                 return false;
             default:
-                _robotStateProcessor.SetState("Connection Error", Color.Red);
+                _robotStateLabelProcessor.SetState("Connection Error", Color.Red);
                 return false;
         }
     }
@@ -178,7 +178,7 @@ public class ToRobotSender
             {
                 _infoTextBoxProcessor.PrintLine(zCoordinateInfo, true);
             }
-            _robotStateProcessor.SetState($"Current Height Z = {zCoord}", Color.Green);
+            _robotStateLabelProcessor.SetState($"Current Height Z = {zCoord}", Color.Green);
         }
     }
     
@@ -213,7 +213,8 @@ public class ToRobotSender
         var result = _serverConnector.SendFileInfo(sendFileInfo);
         if (!result.Equals("1"))
         {
-            _robotStateProcessor.SetState("Format Error", Color.Red);
+            _robotStateLabelProcessor.SetState("Format Error", Color.Red);
+            _infoTextBoxProcessor.PrintLine("Format Error");
         }
     }
 }

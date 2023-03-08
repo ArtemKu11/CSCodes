@@ -8,7 +8,7 @@ public struct BrowsedFilesToPrint
     public string Path;  // Полный путь до директории
     public string DirectoryName;  // Последняя папка в пути
     public int Count;  // Количество файлов. По факту FilesList.Count()
-    public List<string> FilesList;  // Содержит названия файлов .tp. По факту - выпадающий список _layersBox в RobotConnectionForm
+    public List<string> FilesList;  // Содержит названия файлов .tp. По факту - выпадающий список _layersComboBox в RobotConnectionForm
 
     public override string ToString()
     {

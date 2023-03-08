@@ -2,6 +2,11 @@
 
 partial class SettingsWindowForm
 {
+    public TextBox PythonPathTextBox
+    {
+        get => pythonPathTextBox;
+    }
+
     public CheckBox NextLayerTimerCheckBox
     {
         get => nextLayerTimerCheckBox;

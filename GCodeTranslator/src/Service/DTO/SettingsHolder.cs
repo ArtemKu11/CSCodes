@@ -16,4 +16,5 @@ public class SettingsHolder
     public string MaxConnectionTime { get; set; } = "";
     
     public bool EnableLogs { get; set; }
+    public string PythonPath { get; set; }
 }

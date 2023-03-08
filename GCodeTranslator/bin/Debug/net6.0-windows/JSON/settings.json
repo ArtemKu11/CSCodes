@@ -1,1 +1,1 @@
-{"NextLayerTimerEnabled":true,"NextLayerTimerText":"60","CancelButtonTimeEnabled":false,"CancelButtonTimeText":"5","DefaultRobotIp":"192.168.8.101","MaxConnectionTime":"1","EnableLogs":true}
+{"NextLayerTimerEnabled":true,"NextLayerTimerText":"60","CancelButtonTimeEnabled":false,"CancelButtonTimeText":"5","DefaultRobotIp":"192.168.8.101","MaxConnectionTime":"1","EnableLogs":true,"PythonPath":"Scripts\\venv\\Scripts\\python"}

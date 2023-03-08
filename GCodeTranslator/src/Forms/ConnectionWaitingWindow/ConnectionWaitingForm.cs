@@ -1,6 +1,6 @@
 ﻿using GCodeTranslator.Connection.Utils.CheckConnection;
 
-namespace GCodeTranslator.Forms.ConnectionWaitingWindowForm;
+namespace GCodeTranslator.Forms.ConnectionWaitingWindow;
 
 
 /// <summary>

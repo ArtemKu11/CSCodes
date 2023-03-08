@@ -24,7 +24,7 @@ public static class LoggerFactory
     /// <summary>
     /// Создает или возвращает существующий обычный логгер. Перезаписывается каждый раз при запуске приложения. Работает по галочке в настройках
     /// </summary>
-    /// <param name="name">Имя .log файла без ".log" и "appendable_"</param>
+    /// <param name="name">Имя .log файла без ".log"</param>
     /// <returns>Синглтон экземпляр логгера под соответсвующий .log файл</returns>
     public static Logger GetExistingOrCreateNewLogger(string name)
     {
@@ -57,7 +57,7 @@ public static class LoggerFactory
     /// <summary>
     /// Создает или возвращает существующий Appendable логгер. Перезаписывается раз 5-10 МБ. Работает вне зависимости от галочки в настройках
     /// </summary>
-    /// <param name="name">Имя .log файла без ".log"</param>
+    /// <param name="name">Имя .log файла без ".log" и "appendable_"</param>
     /// <returns>Синглтон экземпляр логгера под соответсвующий .log файл</returns>
     public static Logger GetAppendableLogger(string name)
     {

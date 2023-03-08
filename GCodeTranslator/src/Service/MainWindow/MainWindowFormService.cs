@@ -41,6 +41,7 @@ public class MainWindowFormService
         
         _mainWindowForm = mainWindowForm;
         _settingsHolder = InitializeActualSettings();
+        ProcessRunner.PythonPath = _settingsHolder.PythonPath;
         ToTpConverter.StartTpConvertingServer();  // Запуск python-сервера конвертера в .tp
 
     }
@@ -57,14 +58,18 @@ public class MainWindowFormService
 
     public void SetPropertiesFromSettingsHolder()
     {
-        
         _mainWindowForm.RobotAddressTextBox.Text = _settingsHolder.DefaultRobotIp;
+        ProcessRunner.PythonPath = _settingsHolder.PythonPath;
         LoggerFactory.Enabled = _settingsHolder.EnableLogs;
-        
     }
 
     public void StartParse()
     {
+        if (!IsParsedFileSelected())
+        {
+            MessageBox.Show("Сначала выберите файл");
+            return;
+        }
         
         // 1. Получить все необходимые данные из формы для парсеров
         var formProperties = GrabFormPropertiesForParsers();
@@ -108,6 +113,12 @@ public class MainWindowFormService
                             @"Вдруг повезет", @"Фатальная ошибка");
         }
         
+    }
+
+    private bool IsParsedFileSelected()
+    {
+        return _mainWindowForm.GCodeFilenameTextBox.Text != null &&
+               !_mainWindowForm.GCodeFilenameTextBox.Text.Equals("");
     }
 
     public void SelectFile()
@@ -211,7 +222,7 @@ public class MainWindowFormService
         propertiesForConnection.IpAddress = _mainWindowForm.RobotAddressTextBox.Text; // Значение поля "Enter Robot Address"
         propertiesForConnection.SettingsHolder = _settingsHolder;
 
-        propertiesForConnection.RobotStateProcessor = CreateRobotStateProcessor(); // Класс, меняющий значение ячейки "Current Robot State" в MainWindowForm и _stateLabel в RobotConnectionForm
+        propertiesForConnection.RobotStateLabelProcessor = CreateRobotStateProcessor(); // Класс, меняющий значение ячейки "Current Robot State" в MainWindowForm и _stateLabel в RobotConnectionForm
 
         propertiesForConnection.RobotServerConnector = CreateRobotServerConnector(propertiesForConnection.IpAddress);
 
@@ -226,10 +237,10 @@ public class MainWindowFormService
         return new RobotServerConnector(ipAddress, maxConnectionTime);
     }
 
-    private RobotStateProcessor CreateRobotStateProcessor()
+    private RobotStateLabelProcessor CreateRobotStateProcessor()
     {
         
-        var robotStateProcessor = new RobotStateProcessor();
+        var robotStateProcessor = new RobotStateLabelProcessor();
 
         var rowsCount = _mainWindowForm.RobotsTable.Rows.Count;
         var robotStateCell = _mainWindowForm.RobotsTable.Rows[rowsCount - 1].Cells[2];
@@ -393,43 +404,7 @@ public class MainWindowFormService
         return properties;
     }
 
-
-    /*
-     * Для дебага
-     */
-
-
-    private DateTime _prevDoubleDebugClick = DateTime.Now;
-    private int _clickCounter;
-    private DebugWindowForm? _debugWindowForm;
-
-    public void ResolveDebugModEnable(DataGridViewCellEventArgs e)
-    {
-        
-        if (_debugWindowForm is { IsDisposed: false }) return;
-        if (e.RowIndex != -1 || e.ColumnIndex != -1) return;
-        var nowTime = DateTime.Now;
-        var difference = Math.Round((nowTime - _prevDoubleDebugClick).TotalMilliseconds);
-        if (difference < 400)
-        {
-            ++_clickCounter;
-        }
-        else
-        {
-            _clickCounter = 0;
-        }
-
-        _prevDoubleDebugClick = nowTime;
-        if (_clickCounter == 1)
-        {
-            _debugWindowForm = new DebugWindowForm();
-            _debugWindowForm.Show();
-            _clickCounter = 0;
-        }
-        
-    }
-
-    public void CloseDebugWindow()
+    public void CloseEverything()
     {
         
         if (_debugWindowForm is { IsDisposed: false })
@@ -515,10 +490,49 @@ public class MainWindowFormService
             var criticalDifferenceValue = _mainWindowForm.SepCriticalAngleDifferenceTextBox.Text;
             new ProcessRunner().RunPythonAngleFixProcess(fileDirectory, maxAngleValue, criticalDifferenceValue, true);
         }
+        else
+        {
+            MessageBox.Show("Сначала выберите папку");
+        }
     }
     
     private bool IsLsFolderForAnglesSelected()
     {
         return !(_mainWindowForm.SepLsFolderTextBox.Text == null || _mainWindowForm.SepLsFolderTextBox.Text.Equals(""));
+    }
+    
+    /*
+     * Для дебага
+     */
+
+
+    private DateTime _prevDoubleDebugClick = DateTime.Now;
+    private int _clickCounter;
+    private DebugWindowForm? _debugWindowForm;
+
+    public void ResolveDebugModEnable(DataGridViewCellEventArgs e)
+    {
+        
+        if (_debugWindowForm is { IsDisposed: false }) return;
+        if (e.RowIndex != -1 || e.ColumnIndex != -1) return;
+        var nowTime = DateTime.Now;
+        var difference = Math.Round((nowTime - _prevDoubleDebugClick).TotalMilliseconds);
+        if (difference < 400)
+        {
+            ++_clickCounter;
+        }
+        else
+        {
+            _clickCounter = 0;
+        }
+
+        _prevDoubleDebugClick = nowTime;
+        if (_clickCounter == 1)
+        {
+            _debugWindowForm = new DebugWindowForm();
+            _debugWindowForm.Show();
+            _clickCounter = 0;
+        }
+        
     }
 }

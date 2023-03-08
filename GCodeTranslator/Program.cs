@@ -22,10 +22,6 @@ namespace GCodeTranslator
         [STAThread]
         private static void Main()
         {
-            var defaultPythonPath = "python";
-            var venvPythonPath = @"Scripts\venv\Scripts\python";
-            ProcessRunner.PythonPath = venvPythonPath;
-            
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();

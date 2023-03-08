@@ -1,7 +1,7 @@
 ﻿namespace GCodeTranslator.Utils.LogUtils;
 
 /// <summary>
-/// Создание экземпляров предполагается через LoggerFactory. Как правило на один .log файл один логгер
+/// Создание экземпляров предполагается через <see cref="LoggerFactory"/>. Как правило на один .log файл один логгер
 /// <para></para>
 /// Appendable - пишет всегда. Раз в 5-10 МБ очищает
 /// <para>

@@ -8,7 +8,7 @@ namespace GCodeTranslator.Connection.Utils.RobotStateChangeProcessor;
 /// в <see cref="MainWindowForm"/>, _robotStateLabel в <see cref="RobotConnectionForm"/>),
 /// в не завсисимости от потока, в котором используется
 /// </summary>
-public class RobotStateProcessor
+public class RobotStateLabelProcessor
 {
     private readonly object _locker = new();
     

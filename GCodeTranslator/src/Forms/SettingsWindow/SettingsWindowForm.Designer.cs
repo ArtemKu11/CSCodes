@@ -49,6 +49,8 @@
             this.cancelTimeTextBox = new System.Windows.Forms.TextBox();
             this.cancelTimeCheckBox = new System.Windows.Forms.CheckBox();
             this.nextLayerTimerTextBox = new System.Windows.Forms.TextBox();
+            this.pythonPathTextBox = new System.Windows.Forms.TextBox();
+            this.pythonPathLabel = new System.Windows.Forms.Label();
             this.mainSettingsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,6 +67,8 @@
             // 
             // mainSettingsPanel
             // 
+            this.mainSettingsPanel.Controls.Add(this.pythonPathTextBox);
+            this.mainSettingsPanel.Controls.Add(this.pythonPathLabel);
             this.mainSettingsPanel.Controls.Add(this.maxConnectionTimeTextBox);
             this.mainSettingsPanel.Controls.Add(this.maxConnectionTimeLabel);
             this.mainSettingsPanel.Controls.Add(this.defaultIpTextBox);
@@ -78,7 +82,7 @@
             this.mainSettingsPanel.Controls.Add(this.nextLayerTimerCheckBox);
             this.mainSettingsPanel.Location = new System.Drawing.Point(12, 12);
             this.mainSettingsPanel.Name = "mainSettingsPanel";
-            this.mainSettingsPanel.Size = new System.Drawing.Size(310, 237);
+            this.mainSettingsPanel.Size = new System.Drawing.Size(310, 287);
             this.mainSettingsPanel.TabIndex = 1;
             // 
             // maxConnectionTimeTextBox
@@ -118,7 +122,7 @@
             // cancelButton
             // 
             this.cancelButton.Enabled = false;
-            this.cancelButton.Location = new System.Drawing.Point(166, 189);
+            this.cancelButton.Location = new System.Drawing.Point(166, 239);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 6;
@@ -129,7 +133,7 @@
             // saveButton
             // 
             this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(69, 189);
+            this.saveButton.Location = new System.Drawing.Point(69, 239);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 5;
@@ -177,16 +181,31 @@
             this.nextLayerTimerTextBox.Text = "60";
             this.nextLayerTimerTextBox.TextChanged += new System.EventHandler(this.nextLayerTimerTextBox_TextChanged);
             // 
+            // pythonPathTextBox
+            // 
+            this.pythonPathTextBox.Location = new System.Drawing.Point(133, 167);
+            this.pythonPathTextBox.Name = "pythonPathTextBox";
+            this.pythonPathTextBox.Size = new System.Drawing.Size(157, 23);
+            this.pythonPathTextBox.TabIndex = 13;
+            this.pythonPathTextBox.TextChanged += new System.EventHandler(this.PythonPathTextBox_TextChanged);
+            // 
+            // pythonPathLabel
+            // 
+            this.pythonPathLabel.AutoSize = true;
+            this.pythonPathLabel.Location = new System.Drawing.Point(20, 170);
+            this.pythonPathLabel.Name = "pythonPathLabel";
+            this.pythonPathLabel.Size = new System.Drawing.Size(75, 15);
+            this.pythonPathLabel.TabIndex = 12;
+            this.pythonPathLabel.Text = "Python path:";
+            // 
             // SettingsWindowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 261);
+            this.ClientSize = new System.Drawing.Size(334, 311);
             this.Controls.Add(this.mainSettingsPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(350, 300);
-            this.MinimumSize = new System.Drawing.Size(350, 300);
             this.Name = "SettingsWindowForm";
             this.Text = "Настройки";
             this.mainSettingsPanel.ResumeLayout(false);
@@ -209,5 +228,7 @@
         private CheckBox enableLogsCheckBox;
         private TextBox maxConnectionTimeTextBox;
         private TextBox defaultIpTextBox;
+        private TextBox pythonPathTextBox;
+        private Label pythonPathLabel;
     }
 }

@@ -115,6 +115,15 @@ namespace GCodeTranslator.Forms.SettingsWindow
             EnableButtons();
         }
 
+        
+        /*
+        * Ивент смены текста поля "Python path"
+        */
+        private void PythonPathTextBox_TextChanged(object sender, EventArgs e)
+        {
+            EnableButtons();
+        }
+        
         private void EnableButtons()
         {
             cancelButton.Enabled = true;
@@ -126,5 +135,6 @@ namespace GCodeTranslator.Forms.SettingsWindow
             cancelButton.Enabled = false;
             saveButton.Enabled = false;
         }
+        
     }
 }

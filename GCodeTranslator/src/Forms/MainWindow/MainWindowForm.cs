@@ -46,7 +46,7 @@ namespace GCodeTranslator.Forms.MainWindow
         
         private void MainWindowForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _mainWindowFormService.CloseDebugWindow();
+            _mainWindowFormService.CloseEverything();
         }
 
 

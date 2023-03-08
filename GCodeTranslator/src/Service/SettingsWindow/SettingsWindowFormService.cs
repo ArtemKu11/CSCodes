@@ -52,10 +52,16 @@ public class SettingsWindowFormService
             defaultSettingsHolder.MaxConnectionTime = "5";
         }
 
+        if (defaultSettingsHolder.PythonPath == "")
+        {
+            defaultSettingsHolder.PythonPath = "python";
+        }
+
         MessageBox.Show("Не удалось получить актуальные настройки. Установлены следующие:\n" +
                         "Таймер следующего слоя: 60\n" +
-                        "Дефолт IP робота: 192.168.8.101\n" +
-                        "Макс. время ожид. соединения (сек): 5");
+                        $"Дефолт IP робота: {defaultSettingsHolder.DefaultRobotIp}\n" +
+                        $"Макс. время ожид. соединения (сек): {defaultSettingsHolder.MaxConnectionTime}\n" +
+                        $"Pyhon path: {defaultSettingsHolder.PythonPath}");
         new SettingsLoader().WriteSettingsOnDisk(defaultSettingsHolder);
         return defaultSettingsHolder;
     }
@@ -70,6 +76,8 @@ public class SettingsWindowFormService
         settingsHolder.DefaultRobotIp = _settingsWindowForm.DefaultIpTextBox.Text;
         settingsHolder.MaxConnectionTime = _settingsWindowForm.MaxConnectionTimeTextBox.Text;
         settingsHolder.EnableLogs = _settingsWindowForm.EnableLogsCheckBox.Checked;
+        settingsHolder.PythonPath = _settingsWindowForm.PythonPathTextBox.Text;
+
 
         return settingsHolder;
     }
@@ -89,6 +97,7 @@ public class SettingsWindowFormService
             _settingsWindowForm.DefaultIpTextBox.Text = settingsHolder.DefaultRobotIp;
             _settingsWindowForm.MaxConnectionTimeTextBox.Text = settingsHolder.MaxConnectionTime;
             _settingsWindowForm.EnableLogsCheckBox.Checked = settingsHolder.EnableLogs;
+            _settingsWindowForm.PythonPathTextBox.Text = settingsHolder.PythonPath;
         }
     }
 
@@ -97,7 +106,7 @@ public class SettingsWindowFormService
     {
         var settingsHolder = CreateSettingsHolder();
 
-        if (!ValidateValues(settingsHolder))
+        if (!ValidateValues())
         {
             return false;
         }
@@ -106,7 +115,7 @@ public class SettingsWindowFormService
         return true;
     } 
     
-    private bool ValidateValues(SettingsHolder settingsHolder)
+    private bool ValidateValues()
     {
         var errorText = "";
         var errorFlag = false;
@@ -135,6 +144,13 @@ public class SettingsWindowFormService
         if (!ValidateCorrectTime(_settingsWindowForm.MaxConnectionTimeTextBox.Text))
         {
             errorText += "Поле \"Макс. время ожид. соединения (сек)\"\n" +
+                         "имеет неверное значение. Надо исправить";
+            errorFlag = true;
+        }
+
+        if (_settingsWindowForm.PythonPathTextBox.Text.Equals(""))
+        {
+            errorText += "Поле \"Python path\"\n" +
                          "имеет неверное значение. Надо исправить";
             errorFlag = true;
         }

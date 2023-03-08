@@ -1,4 +1,4 @@
-﻿using GCodeTranslator.Forms.ConnectionWaitingWindowForm;
+﻿using GCodeTranslator.Forms.ConnectionWaitingWindow;
 
 namespace GCodeTranslator.Connection.Utils.CheckConnection;
 

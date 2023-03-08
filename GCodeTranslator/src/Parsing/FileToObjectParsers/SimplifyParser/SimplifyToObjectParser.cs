@@ -94,7 +94,7 @@ public class SimplifyToObjectParser : IToObjectParser
         }
 
         _logger.LogWithTime("SimplifyToObjectParser Parse END");
-        _logger.Log($"Обработано точек: {_gCodePoints}");
+        _logger.Log($"Обработано точек: {_gCodePoints.Count}");
         return _gCodePoints;
     }
 
